@@ -45,13 +45,13 @@ clear all
 
 polyorder = 2; % order of the polynomial fit to F0 tracks (1 or 2; default = 2)
 Q_values = [6,12,24]; % codebook sizes used for F0 track quantization (default = [6, 12, 24])
-total_folds = 10; % how many folds to use in training/testing (default = 10) (10)
-n_repeats = 1; % how many times the experiment is repeated and averaged (default = 5) (5)
+total_folds = 10; % how many folds to use in training/testing (default = 10) 
+n_repeats = 5; % how many times the experiment is repeated and averaged (default = 5)
 mocm_order = 5; % order of the mixed-order Markov chain model (default = 5)
-em_iters = 30; % how many EM iters to train mixed-order Markov chain models (default = 30) (30)
+em_iters = 30; % how many EM iters to train mixed-order Markov chain models (default = 30) 
 usesyllables = 1; % use syllables or fixed-frame windowing (default = 1)
 framesize = 0.1; % segment length un fixed-frame windowing (seconds; default = 0.1) 
-doLSTM = 0; % Do LSTM Analysis in addition to MOCM? (needs Python + Keras with Theano/Tensorflow Backend)  (1)
+doLSTM = 0; % Do LSTM Analysis in addition to MOCM? (needs Python + Keras with Theano/Tensorflow Backend)  
 
 pythondir = '/Users/orasanen/anaconda/bin/python'; % location of python executable (for LSTM)
 filedir1 = '/Users/orasanen/speechdb/ManyBabies/ADS Clips Soderstrom/'; % location of ManyBabies ADS data
@@ -516,8 +516,8 @@ for iter = 1:n_repeats
     end
 end
 
-% Remove paddings and get averages by dividing with the number of times the
-% signal was tested.
+% Remove zero paddings and get average likelihoods by dividing with the 
+% number of times the signal was measured in the test set
 
 for propiter = 1:length(id_proportions)
     for k = 1:N

@@ -1,5 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Part 2: Analyze results
+% Part 2: Analyze results (this is only for main effects in case of varying
+% distributions of IDS in the training data). Use idsads_analyze_results.m 
+% for the basic analysis with fixed IDS/ADS proportion.
 
 % repeat the same analysis for MOCM and LSTM models
 
@@ -68,21 +70,12 @@ for propiter = 1:size(F0prob_MOMC,2)
         utterance_length = cellfun(@max,bounds_t)-cellfun(@min,bounds_t);
     end
     
-    
     number_of_frames = cellfun(@length,F0prob);
-    
-    
+        
     % Indices to IDS and ADS utterances
     ids_i = cellfind(METADATA(:,1),'IDS');
     ads_i = cellfind(METADATA(:,1),'ADS');
-    
-    % Print basic stats
-    fprintf('Total %d utterances (%d IDS, %d ADS).\n',length(F0prob),length(ids_i),length(ads_i));
-    fprintf('Total syllables: %d.\n',sum(cellfun(@length,bounds_orig_syllable_t)-1));
-    fprintf('Mean IDS duration: %0.2f (+- %0.2f) s.\n',mean(utterance_length(ids_i)),std(utterance_length(ids_i)));
-    fprintf('Mean ADS duration: %0.2f (+- %0.2f) s.\n',mean(utterance_length(ads_i)),std(utterance_length(ads_i)));
-    
-    
+       
     
     % probs
     all_SD = cellfun(@nanstd,F0prob);
@@ -129,9 +122,7 @@ for propiter = 1:size(F0prob_MOMC,2)
         if(length(i2) > 0 && length(i3) > 0)
             
             SUBJ_STATS(n,:) = mean(UTT_STATS(i2,:),1);
-            SUBJ_STATS(n+1,:) = mean(UTT_STATS(i3,:),1);
-            %am_data(n) = sum(utterance_length(i2));
-            %am_data(n+1) = sum(utterance_length(i3));
+            SUBJ_STATS(n+1,:) = mean(UTT_STATS(i3,:),1);            
             am_data(n) = sum(number_of_frames(i2),1);
             am_data(n+1) = sum(number_of_frames(i3),1);
             
@@ -141,20 +132,13 @@ for propiter = 1:size(F0prob_MOMC,2)
     
     SUBJ_STATS = SUBJ_STATS(1:n-1,:);
     am_data = am_data(1:n-1,:);
-    
-    
+        
     PROPDAT{propiter} = SUBJ_STATS;
     
 end
 
-id_proportions = [0.5 0.75 1 1.25 1.5];
-%id_proportions = [0.1:0.1:1.5];
-id_proportions = [0.1 0.33 0.66 1 1.5 3 10];
-id_proportions = [0:0.25:1];
+id_proportions = 0:0.25:1;
 Nprops = length(id_proportions);
-
-
-
 
 propmeans = zeros(Nprops,2);
 propmean_devs = zeros(Nprops,2);
@@ -164,8 +148,6 @@ propdev_devs = zeros(Nprops,2);
 
 propmax = zeros(Nprops,2);
 propmax_devs = zeros(Nprops,2);
-
-
 
 for prop = 1:Nprops   
     a = find(PROPDAT{prop}(:,1) == 1);
@@ -187,8 +169,7 @@ for prop = 1:Nprops
     
     propmax(prop,2) = mean(PROPDAT{prop}(b,4));
     propmax_devs(prop,2) = std(PROPDAT{prop}(b,4))./sqrt(length(b));  
-    
-    
+        
 end
 
 h = figure(1);clf;

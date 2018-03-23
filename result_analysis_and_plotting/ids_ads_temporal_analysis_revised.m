@@ -1,6 +1,7 @@
 % Do temporal analyses reported in the revised version of the paper
-% (difference to earlier: match IDS and ADS short utterance durations so
-% that no statistical difference exists.
+% Difference to the initial version: match IDS and ADS short utterance 
+% length distributions (number of syllables) instead of using the same
+% threshold for both.
 
 filename = 'results/results_for_the_first_manuscript_submission/results_20-Oct-2017 00:04:48_ManyBabies_usesyllables1_framesize_100.mat'; % syllabic-frame
 
@@ -20,7 +21,6 @@ elseif(strcmp(predmethod,'both'))
 else
     error('Unknown method for sequence prediction.');
 end
-
 
 %% -----------------------------------------------------------------------
 % Part 1, compare long and short IDS and ADS utterances as a function of
@@ -75,9 +75,6 @@ for short = 0:1
     mm_ids = mean(nsyls(ids_i_selected));
         
     [h,p] = ttest2(nsyls(ids_i_selected),nsyls(ads_i_selected));
-    
-    
-    
         
     % Get average F0 and likelihood trajectories as a function of position
     % in the utterances
@@ -427,7 +424,11 @@ xlabel('number of syllables');
 
 
 % Get linear correlation between predictabiliy at each position (IDS or
+
 % ADS) and the number of syllables in the corresponding utterances.
+r = zeros(npos,1);
+r2 = zeros(npos,1);
+
 for j = 1:npos
     r(j) = corr(nsyls(ids_i),relpos(ids_i,j));
     r2(j) = corr(nsyls(ads_i),relpos(ads_i,j));

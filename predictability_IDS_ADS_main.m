@@ -471,8 +471,8 @@ for iter = 1:n_repeats
     end
 end
 
-% Remove paddings and get averages by dividing with the number of times the
-% signal was tested.
+% Remove zero paddings and get average likelihoods by dividing with the 
+% number of times the signal was measured in the test set
 
 for k = 1:N
     if(~isempty(F0prob_MOMC{k}))    
